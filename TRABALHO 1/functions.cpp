@@ -8,23 +8,33 @@
 #include <time.h>
 using namespace std;
 
-//funï¿½ï¿½o utilizada para determinar as interrupï¿½ï¿½es possï¿½veis
-    //limite seguranï¿½a para sensores, botï¿½o seguranï¿½a, botï¿½o desligamento controle.
-bool analizaInterrupcoes( float interrupcao_tempo , float inicio_geral){
+//função utilizada para determinar as interrupções possíveis
+    //limite segurança para sensores, botão segurança, botão desligamento controle.
+bool analizaInterrupcoes(char interrupcao_tipo, float interrupcao_tempo , float inicio_geral){
 
     //transformar a quantidade de tempo em clock
     int clock_limite = int(interrupcao_tempo*float(CLOCKS_PER_SEC));
 
-    //caso eu tenha alcanï¿½ado o limite de clock para a interrupcao eu testo a diretiva
+    //caso eu tenha alcançado o limite de clock para a interrupcao eu testo a diretiva
     if(clock_limite < int((clock()-inicio_geral)*1000)){
-        cout<<"\n\n";
-        tempo_passado(inicio_geral);
-        cout<<"Interrupcao apos tempo limite da chamada.\n";
-        cout<<"Chamada da funcao que realiza tratativa de finalizacao de processo.\n\n\n";
+        if(interrupcao_tipo == 'T'){
+            cout<<"\n\n";
+            tempo_passado(inicio_geral);
+            cout<<"Interrupcao devido a botao tempo.\n";
+            cout<<"Chamada da funcao que realiza tratativa de finalizacao de processo.\n\n\n";
 
-        return true;
+            return true;
+        }
+        if(interrupcao_tipo == 'P'){
+            cout<<"\n\n";
+            tempo_passado(inicio_geral);
+            cout<<"Interrupcao devido a botao emergencia.\n";
+            cout<<"Chamada da funcao que realiza tratativa de emergencia.\n\n\n";
+
+            return true;
+        }
     }
-    //caso nï¿½o tenoa cegado ao limite somente pauso o perï¿½odo de teset da interrupï¿½ï¿½o
+    //caso não tenoa cegado ao limite somente pauso o período de teset da interrupção
     else{
         cout<<"Interrupcao tempo: ";
         funcSleep(randomGen(15,20));
@@ -33,64 +43,21 @@ bool analizaInterrupcoes( float interrupcao_tempo , float inicio_geral){
     return false;
 }
 
-//funï¿½ï¿½o utilizada para realizaï¿½ï¿½o do controle PI da vazï¿½o de controle
-controlProper atuControleVazao(controlProper contStatus, 
-                          tanqueObjeto tanque1,
-                          tanqueObjeto tanque2, 
-                          tanqueObjeto tanque3){
+//função utilizada para realização do controle PI da vazão de controle
+grandeza atuControleVazao(grandeza valor){
     cout<<"Controle Vazao Tempo: ";
     funcSleep(randomGen(225,300));
-
-    float random;
-
-    //Utilizando um consumo randomico
-    random = 0.01*float(rand()%100);
-    contStatus.consumo1 = random;
-
-    random = 0.01*float(rand()%100);
-    contStatus.consumo2 = random;
-
-    float media = (tanque1.preenAtual + tanque2.preenAtual + tanque3.preenAtual) / 3;
-    contStatus.vazao1 = contStatus.ganho*(tanque1.preenAtual-media);
-    contStatus.vazao2 = contStatus.ganho*(tanque3.preenAtual-media);
-
-    return contStatus;
+    return valor;
 }
 
-tanqueObjeto atuAltura(controlProper contStatus, tanqueObjeto tanque, int idTanque){
-    tanque.preenAnter = tanque.preenAtual;
-
-    //selecionar o calculo para diferentes valores. 
-    switch (idTanque)
-    {
-    case 1:
-        tanque.preenAtual = tanque.preenAnter - 
-                            contStatus.consumo1*contStatus.delTempo - 
-                            contStatus.vazao1*contStatus.delTempo;
-        break;
-    case 2:
-        tanque.preenAtual = tanque.preenAnter + 
-                            contStatus.vazao1*contStatus.delTempo + 
-                            contStatus.vazao2*contStatus.delTempo; 
-        break;
-    case 3:
-        tanque.preenAtual = tanque.preenAnter - 
-                            contStatus.consumo2*contStatus.delTempo - 
-                            contStatus.vazao2*contStatus.delTempo;
-        break;
-    }
-
-    return tanque; 
-}
-
-//funï¿½ï¿½o utilizada para leitura auxiliar de pressï¿½o do sistema
+//função utilizada para leitura auxiliar de pressão do sistema
 grandeza atuSensorPressao(grandeza valor){
     cout<<"Sensor Pressao Tempo: ";
     funcSleep(randomGen(75,100));
     return valor;
 }
 
-//funï¿½ï¿½o utilizada para leitura auxiliar de pressï¿½o do sistema
+//função utilizada para leitura auxiliar de pressão do sistema
 grandeza atuSensorVazao(grandeza valor){
     cout<<"Sensor Vazao Tempo: ";
     valor.tempoLeit = 2;
@@ -98,21 +65,21 @@ grandeza atuSensorVazao(grandeza valor){
     return valor;
 }
 
-//funï¿½ï¿½o utilizada para leitura auxiliar de pressï¿½o do sistema
+//função utilizada para leitura auxiliar de pressão do sistema
 grandeza atuSensorTemperatura(grandeza valor){
     cout<<"Sensor Temperatura tempo: ";
     funcSleep(randomGen(75,100));
     return valor;
 }
 
-//funï¿½ï¿½o utilizada para leitura auxiliar de pressï¿½o do sistema
+//função utilizada para leitura auxiliar de pressão do sistema
 grandeza atuSensorAltura(grandeza valor){
     cout<<"Sensor Altura tempo: ";
     funcSleep(randomGen(75,100));
     return valor;
 }
 
-//funï¿½ï¿½o que realiza um sleep de tempo recebido
+//função que realiza um sleep de tempo recebido
 void funcSleep(int temp_Sleep){
     cout<<temp_Sleep<<"\n";
 
@@ -120,7 +87,7 @@ void funcSleep(int temp_Sleep){
     return;
 }
 
-//funï¿½ï¿½o que gera a randomizaï¿½ï¿½o dos processos de leitura
+//função que gera a randomização dos processos de leitura
 int randomGen(int lim_inf, int lim_sup){
     //unsigned seed = time(NULL);
     //srand(seed);
@@ -128,7 +95,7 @@ int randomGen(int lim_inf, int lim_sup){
     return random;
 }
 
-//funï¿½ï¿½o imprime o tempo passado
+//função imprime o tempo passado
 void tempo_passado(float inicio_geral){
     double temp_passado;
     temp_passado = double(int(clock()-inicio_geral)/double(CLOCKS_PER_SEC)*1000);

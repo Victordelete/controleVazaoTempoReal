@@ -1,15 +1,20 @@
 /*Trabalho 1: Sistemas de Tempo Real
-    
+    Aplicação desenvolvida para o trabalho de Sistemas de Tempo Real.
+
+    Programa implementa o controle um processo de vazão para um tanque fechado,
+    levando em consideração o controlador de vazão, leitura de sensor de pressão,
+    sensor de algura do líquido, sensor de composição da mistura, e sensor de vazão.
+    Assim como um processo não periodico de acionamento de segurança do processo.
 
     Aluno: Victor Hugo Marques Vieira.
-    Matrï¿½cula: 150047649.
+    Matrícula: 150047649.
 
-    Desenvolvimento em C/C++ utilizando as bibliotecas nativas do CodeBlocks versï¿½o 17.12
-    habilitando funï¿½ï¿½es de compilaï¿½ï¿½o para C++ 2011 ISO C Language.
+    Desenvolvimento em C/C++ utilizando as bibliotecas nativas do CodeBlocks versão 17.12
+    habilitando funções de compilação para C++ 2011 ISO C Language.
 */
 
-//Inclusï¿½es necessï¿½rias para o programa
-#include "functions.cpp" //mï¿½dulo das funï¿½ï¿½es desenvolvidas
+//Inclusões necessárias para o programa
+#include "functions.cpp" //módulo das funções desenvolvidas
 
     //bibliotecas de tempo para o sistema
 #include <unistd.h>
@@ -21,149 +26,91 @@
 #include <bits/stdc++.h>
     using namespace std;
 
-//DefiniÃ§Ãµes de constantes globais utilizadas no programa
+//definições de constantes globais utilizadas no programa
 int temp_ciclo = 650 ; //tempo de cada ciclo
 clock_t temp_ini, temp_fim;
 float inicio_geral; //guardar o inicio geral do programa
 
-//FunÃ§Ã£o que anÃ¡lisa o tempo necessÃ¡rio para o sincronismo
+//Função que análisa o tempo necessário para o sincronismo
 void anaSleep();
-//FunÃ§Ã£o que realiza um sleep de tempo recebido
+//função que realiza um sleep de tempo recebido
 void funcSleep(float temp_Sleep);
 
 //inicio do programa
 int main(int argc, char *argv[]){
 
-    /*
-    //Abertura de arquivo
     if(argc != 3) {
         cout<<"Poucos argumentos.\n";
         return -1;
     }
 
-    //AtribuiÃ§Ã£o das chamadas da funÃ§Ã£o
+    //atribuição das chamadas da função
     char interrupcao_tipo = argv[1][0];
     float interrupcao_tempo = strtof(argv[2], nullptr) ;
 
-    //caso o argumento recebido seja diferente do tipo T ou P nÃ£o Ã© um teste vÃ¡lido
+    //caso o argumento recebido seja diferente do tipo T ou P não é um teste válido
     if(interrupcao_tipo != 'T' && interrupcao_tipo != 'P'){
         cout<<"Tipo de teste '"<<interrupcao_tipo<<"' nao suportado.\n\n";
         return -1;
     }
-    */
 
-    float interrupcao_tempo = 10.0 ;
-
-    //auxiliar para geraÃ§Ã£o dos testes aleatÃ³rio
+    //auxiliar para geração dos testes aleatórios
     unsigned seed = time(NULL);
     srand(seed);
 
-    //InicializaÃ§Ã£o dos objetos que herdario os valores das funÃ§Ãµes
-    tanqueObjeto tanque1;
-    tanqueObjeto tanque2;
-    tanqueObjeto tanque3;
-
-    controlProper contStatus;
+    //Inicialização dos objetos que herdarão os valores das funções
+    grandeza controleVazao;
+    grandeza sensorPressao;
+    grandeza sensorVazao;
+    grandeza sensorTemperatura;
+    grandeza sensorAltura;
 
     inicio_geral = float(clock());
-    cout<<"Inicio geral"<<inicio_geral<<"\n\n";
-    
-    //loop infinito para o controle das funÃ§Ãµes periodicas
+    cout<<"inicio geral"<<inicio_geral<<"\n\n";
+    //loop infinito para o controle das funções periodicas
     while(true){
         ///PRIMEIRO CICLO
         //pego o tempo inicial do ciclo
         temp_ini = clock()-inicio_geral;
         tempo_passado( inicio_geral);
-            //Controle vazao
-            contStatus = atuControleVazao(contStatus, tanque1, tanque2, tanque3);
-            tanque1 = atuAltura(contStatus, tanque1, 1); 
-            tanque2 = atuAltura(contStatus, tanque2, 2); 
-            tanque3 = atuAltura(contStatus, tanque3, 3); 
-
-            //atualizo as funcoes do TANQUE 1
-            tanque1.sensorPressao = atuSensorPressao(tanque1.sensorPressao);
-                if(analizaInterrupcoes( interrupcao_tempo,  inicio_geral))
+            //atualizo as funções deste ciclo
+            controleVazao = atuControleVazao(controleVazao);
+                if(analizaInterrupcoes(interrupcao_tipo, interrupcao_tempo,  inicio_geral))
                         break;
-            tanque1.sensorVazao = atuSensorVazao(tanque1.sensorVazao);
-                if(analizaInterrupcoes( interrupcao_tempo,  inicio_geral))
+            sensorPressao = atuSensorPressao(sensorPressao);
+                if(analizaInterrupcoes(interrupcao_tipo, interrupcao_tempo,  inicio_geral))
                         break;
-
-            //atualizo as funcoes do TANQUE 2
-            tanque2.sensorPressao = atuSensorPressao(tanque2.sensorPressao);
-                if(analizaInterrupcoes( interrupcao_tempo,  inicio_geral))
+            sensorVazao = atuSensorVazao(sensorVazao);
+                if(analizaInterrupcoes(interrupcao_tipo, interrupcao_tempo,  inicio_geral))
                         break;
-            tanque2.sensorVazao = atuSensorVazao(tanque2.sensorVazao);
-                if(analizaInterrupcoes( interrupcao_tempo,  inicio_geral))
-                        break;
-
-            //atualizo as funcoes do TANQUE 3
-            tanque3.sensorPressao = atuSensorPressao(tanque3.sensorPressao);
-                if(analizaInterrupcoes( interrupcao_tempo,  inicio_geral))
-                        break;
-            tanque3.sensorVazao = atuSensorVazao(tanque3.sensorVazao);
-                if(analizaInterrupcoes( interrupcao_tempo,  inicio_geral))
-                        break;
-
-
         //pego o tempo final do ciclo
         temp_fim = clock()-inicio_geral;
-        anaSleep();//vejo quï¿½o longe do fim do ciclo para inicio do prï¿½ximo
+        anaSleep();//vejo quão longe do fim do ciclo para inicio do próximo
 
         ///SEGUNDO CICLO
         //pego o tempo inicial do ciclo
         temp_ini = clock()-inicio_geral;
         tempo_passado(inicio_geral);
-            //Controle vazao
-            contStatus = atuControleVazao(contStatus, tanque1, tanque2, tanque3);
-            tanque1 = atuAltura(contStatus, tanque1, 1); 
-            tanque2 = atuAltura(contStatus, tanque2, 2); 
-            tanque3 = atuAltura(contStatus, tanque3, 3);
-
-            cout<<"Consumo 1: "<<contStatus.consumo1<<"\n";
-            cout<<"Consumo 2: "<<contStatus.consumo2<<"\n";
-
-            cout<<"Vazao 1: "<<contStatus.vazao1<<"\n";
-            cout<<"Vazao 2: "<<contStatus.vazao2<<"\n";
-
-            cout<<"Tanque 1: "<<tanque1.preenAtual<<"\n";
-            cout<<"Tanque 2: "<<tanque2.preenAtual<<"\n";
-            cout<<"Tanque 3: "<<tanque3.preenAtual<<"\n\n";
-
-            //atualizo as funcoes do TANQUE 1
-            tanque1.sensorTemperatura = atuSensorTemperatura(tanque1.sensorTemperatura);
-                if(analizaInterrupcoes( interrupcao_tempo, inicio_geral))
+            controleVazao = atuControleVazao(controleVazao);
+                if(analizaInterrupcoes(interrupcao_tipo, interrupcao_tempo, inicio_geral))
                         break;
-            tanque1.sensorAltura = atuSensorAltura(tanque1.sensorAltura);
-                if(analizaInterrupcoes( interrupcao_tempo, inicio_geral))
+            sensorTemperatura = atuSensorTemperatura(sensorTemperatura);
+                if(analizaInterrupcoes(interrupcao_tipo, interrupcao_tempo, inicio_geral))
                         break;
-            
-            //atualizo as funcoes do TANQUE 2
-            tanque2.sensorTemperatura = atuSensorTemperatura(tanque2.sensorTemperatura);
-                if(analizaInterrupcoes( interrupcao_tempo, inicio_geral))
+            sensorAltura = atuSensorAltura(sensorAltura);
+                if(analizaInterrupcoes(interrupcao_tipo, interrupcao_tempo, inicio_geral))
                         break;
-            tanque2.sensorAltura = atuSensorAltura(tanque2.sensorAltura);
-                if(analizaInterrupcoes( interrupcao_tempo, inicio_geral))
-                        break;
-
-            //atualizo as funcoes do TANQUE 3
-            tanque3.sensorTemperatura = atuSensorTemperatura(tanque3.sensorTemperatura);
-                if(analizaInterrupcoes( interrupcao_tempo, inicio_geral))
-                        break;
-            tanque3.sensorAltura = atuSensorAltura(tanque3.sensorAltura);
-                if(analizaInterrupcoes( interrupcao_tempo, inicio_geral))
-                        break;
-
         temp_fim = clock()-inicio_geral;
-        anaSleep(); //vejo quï¿½o longe do fim do ciclo para inicio do prï¿½ximo
+        anaSleep(); //vejo quão longe do fim do ciclo para inicio do próximo
     }
 
     return 0;
 }
 
-//Funcao que analisa o tempo necessï¿½rio para o sincronismo
+//Função que análisa o tempo necessário para o sincronismo
 void anaSleep(){
-    //vejo o tempo necessï¿½rio para atingir o perï¿½odo do ciclo
-    int temp_dif = temp_ciclo - (int(temp_fim) - int(temp_ini)); //ciclo de clock nï¿½o convertido para segundos
+    //vejo o tempo necessário para atingir o período do ciclo
+    int temp_dif = temp_ciclo - (int(temp_fim) - int(temp_ini)); //ciclo de clock não convertido para segundos
     //pauso o sistema para atingir este tempo
     cout<<"Fim de ciclo: ";
     //testo para caso o ciclo tenha sido ultrapassado

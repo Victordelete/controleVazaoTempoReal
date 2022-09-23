@@ -6,65 +6,34 @@ class grandeza{
     public:
         float valor; //utilizado para guardar o valor de leitura
         int tempoLeit; //utilizado para manejo do tempo de leitura
-        bool estado; //utilizado para determinar se o estado da leitura ï¿½ preocupante
+        bool estado; //utilizado para determinar se o estado da leitura é preocupante
 };
 
-//classe utilizada na caracterizaÃ§Ã£o dos tanques
-class tanqueObjeto{
-    public:
-        //grandezas associadas a cada tanque
-        grandeza sensorPressao;
-        grandeza sensorVazao;
-        grandeza sensorTemperatura;
-        grandeza sensorAltura;
+//função utilizada para realização do controle PI da vazão de controle
+grandeza atuControleVazao(grandeza valor);
 
-        //grandezas associadas ao controle da vazao. 
-        float preenAnter = 100;
-        float preenAtual = 100; //os tanques iniciam completos
-};
-
-class controlProper{
-    public:
-        //valores iniciais
-        float consumo1 = 1.0;
-        float consumo2 = 1.0;
-
-        float vazao1 = 1.0;
-        float vazao2 = 1.0;
-
-        float delTempo = 1.0;
-        float ganho = 1.2; //ganho para o controle proporcional
-};
-
-//funï¿½ï¿½o utilizada para realizaï¿½ï¿½o do controle PI da vazï¿½o de controle
-controlProper atuControleVazao(controlProper contStatus ,tanqueObjeto tanque1, tanqueObjeto tanque2, tanqueObjeto tanque3);
-
-//funcao que atualiza os dados de altura
-tanqueObjeto atuAltura(controlProper contStatus, tanqueObjeto tanque, int idTanque);
-
-//funï¿½ï¿½o utilizada para leitura auxiliar de pressï¿½o do sistema
+//função utilizada para leitura auxiliar de pressão do sistema
 grandeza atuSensorPressao(grandeza valor);
 
-//funï¿½ï¿½o utilizada para leitura auxiliar de vazao do sistema
+//função utilizada para leitura auxiliar de vazao do sistema
 grandeza atuSensorVazao(grandeza valor);
 
-//funï¿½ï¿½o utilizada para leitura auxiliar de temperatura do sistema
+//função utilizada para leitura auxiliar de temperatura do sistema
 grandeza atuSensorTemperatura(grandeza valor);
 
-//funï¿½ï¿½o utilizada para leitura auxiliar de altura do sistema
+//função utilizada para leitura auxiliar de altura do sistema
 grandeza atuSensorAltura(grandeza valor);
 
-//funï¿½ï¿½o que anï¿½lisa os estados das interrupï¿½ï¿½es do sistema
-bool analizaInterrupcoes( float interrupcao_tempo, float inicio_geral);
+//função que análisa os estados das interrupções do sistema
+bool analizaInterrupcoes(char interrupcao_tipo, float interrupcao_tempo, float inicio_geral);
 
-//funï¿½ï¿½o que realiza um sleep de tempo recebido
+//função que realiza um sleep de tempo recebido
 void funcSleep(int temp_Sleep);
 
-//funï¿½ï¿½o que gera a randomizaï¿½ï¿½o dos processos de leitura
+//função que gera a randomização dos processos de leitura
 int randomGen(int lim_inf, int lim_sup);
 
-//funï¿½ï¿½o imprime o tempo passado
+//função imprime o tempo passado
 void tempo_passado(float inicio_geral);
-
 
 #endif // functions
