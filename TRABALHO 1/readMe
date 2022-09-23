@@ -1,0 +1,23 @@
+Aplicação desenvolvida para o trabalho de Sistemas de Tempo Real.
+
+    Programa implementa o controle um processo de vazão para um tanque fechado,
+    levando em consideração o controlador de vazão, leitura de sensor de pressão,
+    sensor de algura do líquido, sensor de composição da mistura, e sensor de vazão.
+    Assim como um processo não periodico de acionamento de segurança do processo.
+
+    Aluno: Victor Hugo Marques Vieira.
+    Matrícula: 150047649.
+
+    Desenvolvimento em C/C++ utilizando as bibliotecas nativas do CodeBlocks versão 17.12
+    habilitando funções de compilação para C++ 2011 ISO C Language.
+
+    Pode-se compilar a aplicação ainda utilizando terminal Linux (Ubuntu foi realizado os testes):
+
+        gcc modeloControlador.cpp -o modelocontrolador.out
+
+    Programa recebe duas diretivas respectivamente:
+        Char que representa o tipo de interrupção, podendo ser 'T' ou 'P'.
+        O tempo para o acionamento desta interrução.
+
+        /modeloControlador.out P 10.20
+        /modeloControlador.out T 1.2
