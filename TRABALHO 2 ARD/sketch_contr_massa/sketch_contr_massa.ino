@@ -66,7 +66,8 @@ void setup() {
 
 /////LOOP///////////////////////////////////////////////
 void loop() {
-    if(tanque1.preenAtual <= 0 || tanque2.preenAtual <= 0 || tanque3.preenAtual <= 0 ){
+    //if(tanque1.preenAtual <= 0 || tanque2.preenAtual <= 0 || tanque3.preenAtual <= 0 ){
+    if(false){
       delay(1000000000);
     }
     else{
@@ -90,9 +91,17 @@ void loop() {
       //atualizo as funcoes do TANQUE 3
       tanque3.sensorPressao = atuSensorPressao(tanque3.sensorPressao);
       tanque3.sensorVazao = atuSensorVazao(tanque3.sensorVazao);
-      
-      //Serial.println(tanque1.preenAtual);
+
+      Serial.println("C1");
+      Serial.println(tanque1.preenAtual);
+      Serial.println(tanque2.preenAtual);
+      Serial.println(tanque3.preenAtual);
+      Serial.println(contStatus.vazao1);
+      Serial.println(contStatus.vazao2);
+      Serial.println(contStatus.consumo1);
+      Serial.println(contStatus.consumo2);
       anaSleep();//vejo qual longe do fim do ciclo para inicio do proximo
+      Serial.println("\n");
     
       ///SEGUNDO CICLO
       temp_ini = millis();
@@ -114,7 +123,16 @@ void loop() {
       tanque3.sensorTemperatura = atuSensorTemperatura(tanque3.sensorTemperatura);
       tanque3.sensorAltura = atuSensorAltura(tanque3.sensorAltura);
     
-      anaSleep(); //vejo quão longe do fim do ciclo para inicio do pr�ximo
+      Serial.println("C2");
+      Serial.println(tanque1.preenAtual);
+      Serial.println(tanque2.preenAtual);
+      Serial.println(tanque3.preenAtual);
+      Serial.println(contStatus.vazao1);
+      Serial.println(contStatus.vazao2);
+      Serial.println(contStatus.consumo1);
+      Serial.println(contStatus.consumo2);
+      anaSleep();//vejo qual longe do fim do ciclo para inicio do proximo
+      Serial.println("\n");
     }
 }
 
@@ -146,6 +164,13 @@ controlProper atuControleVazao(controlProper contStatus,
   number = 0.01 * float(random(75,100));
   contStatus.consumo1 = number;
 
+  /*if(tanque1.preenAtual>=50){
+    number = 0.01 * float(random(75,100));
+    contStatus.consumo2 = number;
+  }
+  else{
+    contStatus.consumo2 = 0;
+  }*/
   number = 0.01 * float(random(75,100));
   contStatus.consumo2 = number;
 
