@@ -1,5 +1,5 @@
 /*Trabalho 1: Sistemas de Tempo Real
-    
+
 
     Aluno: Victor Hugo Marques Vieira.
     Matr�cula: 150047649.
@@ -22,7 +22,7 @@
     using namespace std;
 
 //Definições de constantes globais utilizadas no programa
-int temp_ciclo = 650 ; //tempo de cada ciclo
+int temp_ciclo = 1020 ; //tempo de cada ciclo
 clock_t temp_ini, temp_fim;
 float inicio_geral; //guardar o inicio geral do programa
 
@@ -66,8 +66,7 @@ int main(int argc, char *argv[]){
     controlProper contStatus;
 
     inicio_geral = float(clock());
-    cout<<"Inicio geral"<<inicio_geral<<"\n\n";
-    
+
     //loop infinito para o controle das funções periodicas
     while(true){
         ///PRIMEIRO CICLO
@@ -76,10 +75,10 @@ int main(int argc, char *argv[]){
         tempo_passado( inicio_geral);
             //Controle vazao
             contStatus = atuControleVazao(contStatus, tanque1, tanque2, tanque3);
-            tanque1 = atuAltura(contStatus, tanque1, 1); 
-            tanque2 = atuAltura(contStatus, tanque2, 2); 
-            tanque3 = atuAltura(contStatus, tanque3, 3); 
-
+            tanque1 = atuAltura(contStatus, tanque1, 1);
+            tanque2 = atuAltura(contStatus, tanque2, 2);
+            tanque3 = atuAltura(contStatus, tanque3, 3);
+            //cout<<contStatus.consumo1<<" "<<contStatus.consumo2<<" "<<tanque1.preenAtual<< " " <<tanque2.preenAtual<<" "<<tanque3.preenAtual<<"\n";
             //atualizo as funcoes do TANQUE 1
             tanque1.sensorPressao = atuSensorPressao(tanque1.sensorPressao);
                 if(analizaInterrupcoes( interrupcao_tempo,  inicio_geral))
@@ -115,19 +114,9 @@ int main(int argc, char *argv[]){
         tempo_passado(inicio_geral);
             //Controle vazao
             contStatus = atuControleVazao(contStatus, tanque1, tanque2, tanque3);
-            tanque1 = atuAltura(contStatus, tanque1, 1); 
-            tanque2 = atuAltura(contStatus, tanque2, 2); 
+            tanque1 = atuAltura(contStatus, tanque1, 1);
+            tanque2 = atuAltura(contStatus, tanque2, 2);
             tanque3 = atuAltura(contStatus, tanque3, 3);
-
-            cout<<"Consumo 1: "<<contStatus.consumo1<<"\n";
-            cout<<"Consumo 2: "<<contStatus.consumo2<<"\n";
-
-            cout<<"Vazao 1: "<<contStatus.vazao1<<"\n";
-            cout<<"Vazao 2: "<<contStatus.vazao2<<"\n";
-
-            cout<<"Tanque 1: "<<tanque1.preenAtual<<"\n";
-            cout<<"Tanque 2: "<<tanque2.preenAtual<<"\n";
-            cout<<"Tanque 3: "<<tanque3.preenAtual<<"\n\n";
 
             //atualizo as funcoes do TANQUE 1
             tanque1.sensorTemperatura = atuSensorTemperatura(tanque1.sensorTemperatura);
@@ -136,7 +125,7 @@ int main(int argc, char *argv[]){
             tanque1.sensorAltura = atuSensorAltura(tanque1.sensorAltura);
                 if(analizaInterrupcoes( interrupcao_tempo, inicio_geral))
                         break;
-            
+
             //atualizo as funcoes do TANQUE 2
             tanque2.sensorTemperatura = atuSensorTemperatura(tanque2.sensorTemperatura);
                 if(analizaInterrupcoes( interrupcao_tempo, inicio_geral))
@@ -165,11 +154,9 @@ void anaSleep(){
     //vejo o tempo necess�rio para atingir o per�odo do ciclo
     int temp_dif = temp_ciclo - (int(temp_fim) - int(temp_ini)); //ciclo de clock n�o convertido para segundos
     //pauso o sistema para atingir este tempo
-    cout<<"Fim de ciclo: ";
     //testo para caso o ciclo tenha sido ultrapassado
     if(temp_dif>0){
         funcSleep(temp_dif);
     }
-    cout<<"\n";
     return;
 }
