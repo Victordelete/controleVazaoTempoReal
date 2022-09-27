@@ -79,18 +79,22 @@ void loop() {
       tanque1 = atuAltura(contStatus, tanque1, 1);
       tanque2 = atuAltura(contStatus, tanque2, 2);
       tanque3 = atuAltura(contStatus, tanque3, 3);
+                  analisaInterrucao();
     
       //atualizo as funcoes do TANQUE 1
       tanque1.sensorPressao = atuSensorPressao(tanque1.sensorPressao);
       tanque1.sensorVazao = atuSensorVazao(tanque1.sensorVazao);
+                  analisaInterrucao();
     
       //atualizo as funcoes do TANQUE 2
       tanque2.sensorPressao = atuSensorPressao(tanque2.sensorPressao);
       tanque2.sensorVazao = atuSensorVazao(tanque2.sensorVazao);
+                  analisaInterrucao();
     
       //atualizo as funcoes do TANQUE 3
       tanque3.sensorPressao = atuSensorPressao(tanque3.sensorPressao);
       tanque3.sensorVazao = atuSensorVazao(tanque3.sensorVazao);
+                  analisaInterrucao();
 
       Serial.println("C1");
       Serial.println(tanque1.preenAtual);
@@ -100,7 +104,7 @@ void loop() {
       Serial.println(contStatus.vazao2);
       Serial.println(contStatus.consumo1);
       Serial.println(contStatus.consumo2);
-      anaSleep();//vejo qual longe do fim do ciclo para inicio do proximo
+      anaSleep(); //Analiso e imprimo as 
       Serial.println("\n");
     
       ///SEGUNDO CICLO
@@ -110,18 +114,22 @@ void loop() {
       tanque1 = atuAltura(contStatus, tanque1, 1);
       tanque2 = atuAltura(contStatus, tanque2, 2);
       tanque3 = atuAltura(contStatus, tanque3, 3);
+                  analisaInterrucao();
     
       //atualizo as funcoes do TANQUE 1
       tanque1.sensorTemperatura = atuSensorTemperatura(tanque1.sensorTemperatura);
       tanque1.sensorAltura = atuSensorAltura(tanque1.sensorAltura);
+                  analisaInterrucao();
     
       //atualizo as funcoes do TANQUE 2
       tanque2.sensorTemperatura = atuSensorTemperatura(tanque2.sensorTemperatura);
       tanque2.sensorAltura = atuSensorAltura(tanque2.sensorAltura);
+                  analisaInterrucao();
     
       //atualizo as funcoes do TANQUE 3
       tanque3.sensorTemperatura = atuSensorTemperatura(tanque3.sensorTemperatura);
       tanque3.sensorAltura = atuSensorAltura(tanque3.sensorAltura);
+                  analisaInterrucao();
     
       Serial.println("C2");
       Serial.println(tanque1.preenAtual);
@@ -149,6 +157,12 @@ void anaSleep() {
     funcSleep(temp_dif);
   
     return;
+}
+
+//Analisa interrupçoes
+void analisaInterrucao(){
+  funcSleep(randomGen(15, 25));
+  return; 
 }
 
 //função utilizada para realiza��o do controle PI da vaz�o de controle
