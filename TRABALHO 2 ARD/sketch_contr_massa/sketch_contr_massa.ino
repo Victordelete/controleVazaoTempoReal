@@ -66,8 +66,7 @@ void setup() {
 
 /////LOOP///////////////////////////////////////////////
 void loop() {
-    //if(tanque1.preenAtual <= 0 || tanque2.preenAtual <= 0 || tanque3.preenAtual <= 0 ){
-    if(false){
+    if(tanque1.preenAtual <= 0 || tanque2.preenAtual <= 0 || tanque3.preenAtual <= 0 ){
       delay(1000000000);
     }
     else{
