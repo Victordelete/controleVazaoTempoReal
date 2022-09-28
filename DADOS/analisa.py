@@ -7,7 +7,7 @@ file = "analisa.py"
 path = os.path.abspath(file)
 path = path[0: -len(file)]
 
-i = 2
+i = 3
 
 if i == 0:
     tId = "\\0_doisConsumosIguais.txt"
@@ -19,7 +19,9 @@ if i == 2:
     tId = "\\2_consumoZera.txt"
 
 if i == 3:
-    tId = "\\3_wcet.txt"
+    tId = "\\2_consumoZera - Copia.txt"
+    
+print(path+tId)
 
 arquivo = open(path + tId, "r")
 
@@ -74,12 +76,11 @@ while True:
         print("Fim do arquivo.\n")
         break
 
-fig, ax = plt.subplot()
-
-fig.subtitle('Teste 0: eficacia do controle')
+fig, ax = plt.subplots(2)
 
 ax[0].plot(ind, tanque1, 'g', ind, tanque2, 'r', ind, tanque3, 'y')
 
-ax[1].plot(ind, consumo1, 'g', ind, consumo2, 'r')
+#ax[1].plot(ind, consumo1, 'g', ind, consumo2, 'y')
+ax[1].plot(ind, tempoRes)
 
 arquivo.close()

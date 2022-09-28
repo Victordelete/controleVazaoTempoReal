@@ -45,7 +45,7 @@ class controlProper {
 };
 
 //Definições de constantes globais utilizadas no programa
-unsigned long temp_ciclo = 900 ; //tempo de cada ciclo
+unsigned long temp_ciclo = 1000 ; //tempo de cada ciclo
 
 unsigned long temp_ini = millis();
 
@@ -62,6 +62,9 @@ tanqueObjeto tanque3;
 void setup() {
   Serial.begin(9600);
   randomSeed(analogRead(0));
+
+  tanque3.preenAtual = 10;
+  tanque3.preenAnter = 10;
 }
 
 /////LOOP///////////////////////////////////////////////
@@ -184,12 +187,20 @@ controlProper atuControleVazao(controlProper contStatus,
   else{
     contStatus.consumo2 = 0;
   }*/
-  number = 0.01 * float(random(75,100));
+  number = 3*0.01 * float(random(75,100));
   contStatus.consumo2 = number;
 
   float media = (tanque1.preenAtual + tanque2.preenAtual + tanque3.preenAtual) / 3;
   contStatus.vazao1 = contStatus.ganho * (tanque1.preenAtual - media);
   contStatus.vazao2 = contStatus.ganho * (tanque3.preenAtual - media);
+
+  if(contStatus.vazao1 > 1.0){
+    contStatus.vazao1 = 1.0; 
+  }
+
+   if(contStatus.vazao2 > 1.0){
+    contStatus.vazao2 = 1.0;
+  }
 
   return contStatus;
 }
